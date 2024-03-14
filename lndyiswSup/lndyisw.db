@@ -18,7 +18,7 @@ record(bo, "$(P)DISABLE")
     field(ONAM, "COMMS DISABLED")
 }
 
-record(stringin, "$(P)sysDescr")
+record(stringin, "$(P)SYSTEM")
 {
      field(DESC, "description")
      field(DTYP, "Snmp")
@@ -26,7 +26,52 @@ record(stringin, "$(P)sysDescr")
      field(INP, "@$(HOST) public SNMPv2-MIB::sysDescr.0 STRING: 100 s")
 }
 
-record(stringin, "$(P)uptime")
+record(stringin, "$(P)CONTACT")
+{
+     field(DESC, "System Contact")
+     field(DTYP, "Snmp")
+     field(SCAN, "2 second")
+     field(INP, "@$(HOST) public RFC1213-MIB::sysContact.0 STRING: 100 s")
+}
+
+record(stringout, "$(P)CONTACT:SET")
+{
+     field(DESC, "System Contact Setter")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public RFC1213-MIB::sysContact.0 STRING: 100 s")
+}
+
+record(stringin, "$(P)NAME")
+{
+     field(DESC, "System Name")
+     field(DTYP, "Snmp")
+     field(SCAN, "2 second")
+     field(INP, "@$(HOST) public RFC1213-MIB::sysName.0 STRING: 100 s")
+}
+
+record(stringout, "$(P)NAME:SET")
+{
+     field(DESC, "System Name Setter")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public RFC1213-MIB::sysName.0 STRING: 100 s")
+}
+
+record(stringin, "$(P)LOCATION")
+{
+     field(DESC, "System Location")
+     field(DTYP, "Snmp")
+     field(SCAN, "2 second")
+     field(INP, "@$(HOST) public RFC1213-MIB::sysLocation.0 STRING: 100 s")
+}
+
+record(stringout, "$(P)LOCATION:SET")
+{
+     field(DESC, "System Location Setter")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public RFC1213-MIB::sysLocation.0 STRING: 100 s")
+}
+
+record(stringin, "$(P)UPTIME")
 {
      field(DESC, "uptime")
      field(DTYP, "Snmp")
@@ -34,7 +79,7 @@ record(stringin, "$(P)uptime")
      field(INP, "@$(HOST) public DISMAN-EXPRESSION-MIB::sysUpTimeInstance ) 100 s")
 }
 
-record(longin, "$(P)uptime:sec")
+record(longin, "$(P)UPTIME:SEC")
 {
      field(DESC, "uptime")
      field(DTYP, "Snmp")
@@ -42,9 +87,7 @@ record(longin, "$(P)uptime:sec")
      field(INP, "@$(HOST) public DISMAN-EXPRESSION-MIB::sysUpTimeInstance ( 100 i")
 }
 
-
-
-record(longin, "$(P)threashold1")
+record(longin, "$(P)THRESHOLD:WARNING")
 {
      field(DESC, "SNMP channel")
      field(DTYP, "Snmp")
@@ -52,10 +95,88 @@ record(longin, "$(P)threashold1")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 i")
 }
 
-record(longin, "$(P)threashold2")
+record(longin, "$(P)THRESHOLD:OVERLOAD")
 {
      field(DESC, "SNMP channel")
      field(DTYP, "Snmp")
      field(SCAN, "2 second")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 i")
+}
+
+record(waveform, "$(P)OUTLET:_STATUS")
+{
+     field(DESC, "PSU Outlet Status")
+     field(DTYP, "Snmp")
+     field(SCAN, "2 second")
+     field(INP, "@$(HOST) public PDU-MIB::pdu01OutletStatus.0 STRING: 100 s")
+	 field(FTVL, "CHAR")
+	 field(NELM, "200")
+	 field(FLNK, "$(P)OUTLET:STATUS")
+}
+
+record(stringin, "$(P)OUTLET:SEP")
+{
+    field(VAL, ",")
+}
+
+
+record(aSub, "$(P)OUTLET:STATUS")
+{
+     field(DESC, "PSU Outlet Status")
+	 field(SNAM, "splitCharWaveform")
+     field(INPA, "$(P)OUTLET:_STATUS")
+     field(INPB, "$(P)OUTLET:_STATUS.NORD")
+	 field(FTB, "ULONG")
+	 field(FTC, "ULONG")
+	 field(FTD, "STRING")
+	 field(FTE, "ULONG")
+	 field(FTA, "CHAR")
+	 field(FTVA, "STRING")
+	 field(FTVB, "STRING")
+	 field(FTVC, "STRING")
+	 field(FTVD, "STRING")
+	 field(FTVE, "STRING")
+	 field(FTVF, "STRING")
+	 field(FTVG, "STRING")
+	 field(FTVH, "STRING")
+	 field(FTVU, "ULONG")
+	 field(NOA, "200")
+	 field(INPC, "1")
+	 field(INPD, "$(P)OUTLET:SEP")
+}
+
+record(waveform, "$(P)OUTLET:_CURRENT")
+{
+     field(DESC, "PSU Outlet Current value")
+     field(DTYP, "Snmp")
+     field(SCAN, "2 second")
+     field(INP, "@$(HOST) public PDU-MIB::pdu01SubValues.0 STRING: 100 s")
+	 field(FTVL, "CHAR")
+	 field(NELM, "200")
+	 field(FLNK, "$(P)OUTLET:CURRENT")
+}
+
+record(aSub, "$(P)OUTLET:CURRENT")
+{
+     field(DESC, "PSU Outlet CURRENT")
+	 field(SNAM, "splitCharWaveform")
+     field(INPA, "$(P)OUTLET:_CURRENT")
+     field(INPB, "$(P)OUTLET:_CURRENT.NORD")
+	 field(FTB, "ULONG")
+	 field(FTC, "ULONG")
+	 field(FTD, "STRING")
+	 field(FTE, "ULONG")
+	 field(FTA, "CHAR")
+	 field(FTVA, "STRING")
+	 field(FTVB, "STRING")
+	 field(FTVC, "STRING")
+	 field(FTVD, "STRING")
+	 field(FTVE, "STRING")
+	 field(FTVF, "STRING")
+	 field(FTVG, "STRING")
+	 field(FTVH, "STRING")
+	 field(FTVU, "ULONG")
+	 field(NOA, "200")
+	 field(INPC, "1")
+	 field(INPD, "$(P)OUTLET:SEP")
 }

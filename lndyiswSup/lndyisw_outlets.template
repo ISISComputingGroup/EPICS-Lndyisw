@@ -6,3 +6,15 @@ record(stringin, "$(P)OUTLET$(OUTLET):CONFIG")
      field(SCAN, "2 second")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Outlet$(OUTLET)Config.0 STRING: 100 s")
 }
+
+record(longin, "$(P)OUTLET$(OUTLET):STATUS")
+{
+     field(DESC, "PSU Outlet $(OUTLET) Status")
+     field(INP, "$(P)OUTLET:STATUS.VAL$(WF) CP")
+}
+
+record(longin, "$(P)OUTLET$(OUTLET):CURRENT")
+{
+     field(DESC, "PSU Outlet $(OUTLET) values (currents)")
+     field(INP, "$(P)OUTLET:CURRENT.VAL$(WF) CP")
+}
