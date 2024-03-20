@@ -22,11 +22,9 @@ record(longin, "$(P)OUTLET$(OUTLET):CURRENT")
 record(mbbo, "$(P)OUTLET$(OUTLET):STATUS:SP")
 {
     field(DTYP, "Raw Soft Channel")
-	field(ZRST, "0")
-	field(ONST, "1")
+	field(ZRST, "OFF")
+	field(ONST, "ON")
     field(ZRVL, "$(OUTLET)0")
     field(ONVL, "$(OUTLET)1")
-    field(OUT, "scalcout.I PP")
-    field(FLNK, "$(P)OUTLET$(OUTLET):STATUS")
+    field(OUT, "$(P)STATUS:CURRVAL.I PP")
 }
-
