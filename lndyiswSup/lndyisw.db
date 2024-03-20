@@ -116,9 +116,8 @@ record(waveform, "$(P)OUTLET:_STATUS")
 
 record(stringin, "$(P)OUTLET:SEP")
 {
-    field(VAL, ",")
+    field(VAL, ",\"")
 }
-
 
 record(aSub, "$(P)OUTLET:STATUS")
 {
@@ -139,6 +138,8 @@ record(aSub, "$(P)OUTLET:STATUS")
 	 field(FTVF, "STRING")
 	 field(FTVG, "STRING")
 	 field(FTVH, "STRING")
+	 field(FTVI, "STRING")
+	 field(FTVJ, "STRING")
 	 field(FTVU, "ULONG")
 	 field(NOA, "200")
 	 field(INPC, "1")
@@ -175,8 +176,31 @@ record(aSub, "$(P)OUTLET:CURRENT")
 	 field(FTVF, "STRING")
 	 field(FTVG, "STRING")
 	 field(FTVH, "STRING")
+	 field(FTVI, "STRING")
+	 field(FTVJ, "STRING")
 	 field(FTVU, "ULONG")
 	 field(NOA, "200")
 	 field(INPC, "1")
 	 field(INPD, "$(P)OUTLET:SEP")
+}
+
+record(stringout, "$(P)STATUS:ALLSET")
+{
+     field(DESC, "Sets all the outlet status")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public PDU-MIB::pdu01OutletStatus.0 STRING: 100 s")
+}
+
+record(scalcout, "$(P)STATUS:CURRVAL")
+{
+    field(INPA, "$(P)OUTLET:STATUS.VALB")
+	field(INPB, "$(P)OUTLET:STATUS.VALC")
+    field(INPC, "$(P)OUTLET:STATUS.VALD")
+	field(INPD, "$(P)OUTLET:STATUS.VALE")
+    field(INPE, "$(P)OUTLET:STATUS.VALF")
+	field(INPF, "$(P)OUTLET:STATUS.VALG")
+    field(INPG, "$(P)OUTLET:STATUS.VALH")
+	field(INPH, "$(P)OUTLET:STATUS.VALI")
+	field(CALC, "@(INT(I/10)):=(I%10);A+','+B+','+C+','+D+','+E+','+F+','+G+','+H")
+	field(OUT, "$(P)STATUS:ALLSET PP")
 }
