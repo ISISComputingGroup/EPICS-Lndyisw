@@ -95,12 +95,34 @@ record(longin, "$(P)THRESHOLD:WARNING")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 i")
 }
 
+record(longout, "$(P)THRESHOLD:WARNING:SET")
+{
+     field(DESC, "System Threshold Warning Setter")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 i")
+}
+
 record(longin, "$(P)THRESHOLD:OVERLOAD")
 {
      field(DESC, "SNMP channel")
      field(DTYP, "Snmp")
      field(SCAN, "2 second")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 i")
+}
+
+record(longout, "$(P)THRESHOLD:OVERLOAD:SET")
+{
+     field(DESC, "System Threshold Overload Setter")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 i")
+}
+
+record(longin, "$(P)OUTLET:TCURRENT")
+{
+     field(DESC, "SNMP channel")
+     field(DTYP, "Snmp")
+     field(SCAN, "2 second")
+     field(INP, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 i")
 }
 
 record(waveform, "$(P)OUTLET:_STATUS")

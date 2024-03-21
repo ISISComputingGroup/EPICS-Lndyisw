@@ -1,10 +1,13 @@
 
-record(stringin, "$(P)OUTLET$(OUTLET):CONFIG")
+record(waveform, "$(P)OUTLET$(OUTLET):CONFIG")
 {
      field(DESC, "PSU Outlet $(OUTLET) Config")
      field(DTYP, "Snmp")
      field(SCAN, "2 second")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Outlet$(OUTLET)Config.0 STRING: 100 s")
+	 field(FTVL, "CHAR")
+	 field(NELM, "200")
+	 field(FLNK, "$(P)OUTLET$(OUTLET):CONFIG:SPLIT")
 }
 
 record(longin, "$(P)OUTLET$(OUTLET):STATUS")
@@ -27,4 +30,44 @@ record(mbbo, "$(P)OUTLET$(OUTLET):STATUS:SP")
     field(ZRVL, "$(OUTLET)0")
     field(ONVL, "$(OUTLET)1")
     field(OUT, "$(P)STATUS:CURRVAL.I PP")
+}
+
+record(stringout, "$(P)OUTLET$(OUTLET):CONFIG:NAME:SP")
+{
+     field(DESC, "Sets all the outlet$(OUTLET) Config parameters")
+     field(DTYP, "Snmp")
+     field(OUT, "@$(HOST) public PDU-MIB::pdu01Outlet$(OUTLET)Config.0 STRING: 100 s")
+}
+
+record(stringin, "$(P)OUTLET$(OUTLET):CONFIG:NAME")
+{
+     field(DESC, "PSU Outlet $(OUTLET) Configured Name")
+     field(INP, "$(P)OUTLET$(OUTLET):CONFIG:SPLIT.VALB CP")
+}
+
+record(aSub, "$(P)OUTLET$(OUTLET):CONFIG:SPLIT")
+{
+     field(DESC, "PSU Outlet$(OUTLET) Config Splitter")
+	 field(SNAM, "splitCharWaveform")
+     field(INPA, "$(P)OUTLET$(OUTLET):CONFIG")
+     field(INPB, "$(P)OUTLET$(OUTLET):CONFIG.NORD")
+	 field(INPC, "1")
+	 field(INPD, "$(P)OUTLET:SEP")
+	 field(FTA, "CHAR")
+	 field(FTB, "ULONG")
+	 field(FTC, "ULONG")
+	 field(FTD, "STRING")
+	 field(FTE, "ULONG")
+	 field(FTVA, "STRING")
+	 field(FTVB, "STRING")
+	 field(FTVC, "STRING")
+	 field(FTVD, "STRING")
+	 field(FTVE, "STRING")
+	 field(FTVF, "STRING")
+	 field(FTVG, "STRING")
+	 field(FTVH, "STRING")
+	 field(FTVI, "STRING")
+	 field(FTVJ, "STRING")
+	 field(FTVU, "ULONG")
+	 field(NOA, "200")
 }
