@@ -32,6 +32,12 @@ record(mbbo, "$(P)OUTLET$(OUTLET):STATUS:SP")
     field(OUT, "$(P)STATUS:CURRVAL.I PP")
 }
 
+record(stringout, "$(P)OUTLET$(OUTLET):CONFIG:NAME:HOLDER")
+{
+     field(DESC, "Holds the user entered outlet$(OUTLET) Config name")
+     field(OUT, "$(P)OUTLET$(OUTLET):CONFIG:NAME:SP PP")
+}
+
 record(stringout, "$(P)OUTLET$(OUTLET):CONFIG:NAME:SP")
 {
      field(DESC, "Sets all the outlet$(OUTLET) Config parameters")
