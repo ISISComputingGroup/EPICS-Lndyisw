@@ -87,12 +87,15 @@ record(longin, "$(P)UPTIME:SEC")
      field(INP, "@$(HOST) public DISMAN-EXPRESSION-MIB::sysUpTimeInstance ( 100 i")
 }
 
-record(longin, "$(P)THRESHOLD:WARNING")
+record(ai, "$(P)THRESHOLD:WARNING")
 {
-     field(DESC, "SNMP channel")
+     field(DESC, "SNMP channel Threshold(Warning)")
      field(DTYP, "Snmp")
+	 field(ASLO, "0.1")
+	 field(EGU,  "Amp")
      field(SCAN, "2 second")
-     field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 i")
+     field(RVAL, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 iR")
+	 field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 iR")
 }
 
 record(longout, "$(P)THRESHOLD:WARNING:SET")
@@ -102,12 +105,15 @@ record(longout, "$(P)THRESHOLD:WARNING:SET")
      field(OUT, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 i")
 }
 
-record(longin, "$(P)THRESHOLD:OVERLOAD")
+record(ai, "$(P)THRESHOLD:OVERLOAD")
 {
-     field(DESC, "SNMP channel")
+     field(DESC, "SNMP channel Threshold(Overload)")
      field(DTYP, "Snmp")
+	 field(ASLO, "0.1")
+	 field(EGU,  "Amp")
      field(SCAN, "2 second")
-     field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 i")
+	 field(RVAL, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 iR")
+     field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 iR")
 }
 
 record(longout, "$(P)THRESHOLD:OVERLOAD:SET")
@@ -119,10 +125,13 @@ record(longout, "$(P)THRESHOLD:OVERLOAD:SET")
 
 record(longin, "$(P)OUTLET:TCURRENT")
 {
-     field(DESC, "SNMP channel")
+     field(DESC, "Overall Current")
      field(DTYP, "Snmp")
      field(SCAN, "2 second")
-     field(INP, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 i")
+	 field(ASLO, "0.1")
+	 field(EGU,  "Amp")
+	 field(RVAL, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 FR")
+     field(INP, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 FR")
 }
 
 record(waveform, "$(P)OUTLET:_STATUS")
