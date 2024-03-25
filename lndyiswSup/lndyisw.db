@@ -34,7 +34,7 @@ record(stringin, "$(P)CONTACT")
      field(INP, "@$(HOST) public RFC1213-MIB::sysContact.0 STRING: 100 s")
 }
 
-record(stringout, "$(P)CONTACT:SET")
+record(stringout, "$(P)CONTACT:SP")
 {
      field(DESC, "System Contact Setter")
      field(DTYP, "Snmp")
@@ -49,7 +49,7 @@ record(stringin, "$(P)NAME")
      field(INP, "@$(HOST) public RFC1213-MIB::sysName.0 STRING: 100 s")
 }
 
-record(stringout, "$(P)NAME:SET")
+record(stringout, "$(P)NAME:SP")
 {
      field(DESC, "System Name Setter")
      field(DTYP, "Snmp")
@@ -64,7 +64,7 @@ record(stringin, "$(P)LOCATION")
      field(INP, "@$(HOST) public RFC1213-MIB::sysLocation.0 STRING: 100 s")
 }
 
-record(stringout, "$(P)LOCATION:SET")
+record(stringout, "$(P)LOCATION:SP")
 {
      field(DESC, "System Location Setter")
      field(DTYP, "Snmp")
@@ -92,13 +92,13 @@ record(ai, "$(P)THRESHOLD:WARNING")
      field(DESC, "SNMP channel Threshold(Warning)")
      field(DTYP, "Snmp")
 	 field(ASLO, "0.1")
+	 field(PREC, "1")
 	 field(EGU,  "Amp")
      field(SCAN, "2 second")
-     field(RVAL, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 iR")
 	 field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold1.0 INTEGER: 100 iR")
 }
 
-record(longout, "$(P)THRESHOLD:WARNING:SET")
+record(longout, "$(P)THRESHOLD:WARNING:SP")
 {
      field(DESC, "System Threshold Warning Setter")
      field(DTYP, "Snmp")
@@ -110,28 +110,29 @@ record(ai, "$(P)THRESHOLD:OVERLOAD")
      field(DESC, "SNMP channel Threshold(Overload)")
      field(DTYP, "Snmp")
 	 field(ASLO, "0.1")
+	 field(PREC, "1")
 	 field(EGU,  "Amp")
      field(SCAN, "2 second")
-	 field(RVAL, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 iR")
+
      field(INP, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 iR")
 }
 
-record(longout, "$(P)THRESHOLD:OVERLOAD:SET")
+record(longout, "$(P)THRESHOLD:OVERLOAD:SP")
 {
      field(DESC, "System Threshold Overload Setter")
      field(DTYP, "Snmp")
      field(OUT, "@$(HOST) public PDU-MIB::pdu01Threshold2.0 INTEGER: 100 i")
 }
 
-record(longin, "$(P)OUTLET:TCURRENT")
+record(ai, "$(P)OUTLET:TCURRENT")
 {
      field(DESC, "Overall Current")
      field(DTYP, "Snmp")
      field(SCAN, "2 second")
 	 field(ASLO, "0.1")
+	 field(PREC, "1")
 	 field(EGU,  "Amp")
-	 field(RVAL, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 FR")
-     field(INP, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 FR")
+     field(INP, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 iR")
 }
 
 record(waveform, "$(P)OUTLET:_STATUS")

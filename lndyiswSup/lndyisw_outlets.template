@@ -34,7 +34,7 @@ record(mbbo, "$(P)OUTLET$(OUTLET):STATUS:SP")
 
 record(stringout, "$(P)OUTLET$(OUTLET):CONFIG:NAME:HOLDER")
 {
-     field(DESC, "Holds the user entered outlet$(OUTLET) Config name")
+     field(DESC, "Holds user entered outlet$(OUTLET) Config name")
      field(OUT, "$(P)OUTLET$(OUTLET):CONFIG:NAME:SP PP")
 }
 
