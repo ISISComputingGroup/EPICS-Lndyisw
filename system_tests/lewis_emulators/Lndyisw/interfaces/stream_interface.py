@@ -29,4 +29,5 @@ class LndyiswStreamInterface(StreamInterface):
         self.log.error("An error occurred at request " + repr(request) + ": " + repr(error))
 
     def catch_all(self, command):
+        self.log.info("Some Information Here")
         pass
