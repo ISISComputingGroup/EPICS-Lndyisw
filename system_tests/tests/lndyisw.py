@@ -24,7 +24,7 @@ IOCS = [
 ]
 
 
-TEST_MODES = [TestModes.RECSIM, TestModes.DEVSIM]
+TEST_MODES = [TestModes.DEVSIM]
 
 
 class LndyiswTests(unittest.TestCase):
