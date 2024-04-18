@@ -10,8 +10,10 @@ record(waveform, "$(P)OUTLET$(OUTLET):CONFIG")
 	 field(FLNK, "$(P)OUTLET$(OUTLET):CONFIG:SPLIT")
 }
 
-record(longin, "$(P)OUTLET$(OUTLET):STATUS")
+record(bi, "$(P)OUTLET$(OUTLET):STATUS")
 {
+ 	 field(ZNAM, "OFF")
+	 field(ONAM, "ON")
      field(DESC, "PSU Outlet $(OUTLET) Status")
      field(INP, "$(P)OUTLET:STATUS.VAL$(WF) CP")
 }
