@@ -19,7 +19,8 @@ IOCS = [
         },
         "emulator": "Lndyisw",
         "emulator_launcher_class": CommandLineEmulatorLauncher,
-        "emulator_command_line": "responder.bat",
+        "emulator_command_line": "cmd.exe /c responder.bat",
+        "emulator_cwd_emulator_path": True,
     },
 ]
 
