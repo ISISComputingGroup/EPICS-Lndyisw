@@ -73,6 +73,3 @@ class LndyiswTests(unittest.TestCase):
         self.ca.set_pv_value("LOCATION:SP", old_value)
         self.ca.assert_that_pv_is_not("LOCATION", new_value)
         self.ca.assert_that_pv_is("LOCATION", old_value)
-        
-    #def test_that_fails(self):
-    #    self.fail("You haven't implemented any tests!")
