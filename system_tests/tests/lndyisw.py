@@ -71,3 +71,10 @@ class LndyiswTests(unittest.TestCase):
         self.ca.set_pv_value("LOCATION:SP", old_value)
         self.ca.assert_that_pv_is_not("LOCATION", new_value)
         self.ca.assert_that_pv_is("LOCATION", old_value)
+
+    def test_LNDYISW_ioc_WHEN_two_sets_THEN_both_work(self):
+        self.ca.set_pv_value("OUTLET1:STATUS:SP", 1, sleep_after_set=0)
+        self.ca.set_pv_value("OUTLET2:STATUS:SP", 1)
+        
+        self.ca.assert_that_pv_is("OUTLET1:STATUS", "ON")
+        self.ca.assert_that_pv_is("OUTLET2:STATUS", "ON")
