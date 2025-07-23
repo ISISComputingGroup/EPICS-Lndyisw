@@ -15,7 +15,7 @@ record(bi, "$(P)OUTLET$(OUTLET):STATUS")
  	 field(ZNAM, "OFF")
 	 field(ONAM, "ON")
      field(DESC, "PSU Outlet $(OUTLET) Status")
-     field(INP, "$(P)OUTLET:STATUS.VAL$(WF) CP")
+     field(INP, "$(P)OUTLET:STATUS$(STATUS).$(WF) CP")
 }
 
 record(longin, "$(P)OUTLET$(OUTLET):CURRENT")
