@@ -78,3 +78,9 @@ class LndyiswTests(unittest.TestCase):
         
         self.ca.assert_that_pv_is("OUTLET1:STATUS", "ON")
         self.ca.assert_that_pv_is("OUTLET2:STATUS", "ON")
+
+        self.ca.set_pv_value("OUTLET1:STATUS:SP", 0, sleep_after_set=0)
+        self.ca.set_pv_value("OUTLET2:STATUS:SP", 0)
+        
+        self.ca.assert_that_pv_is("OUTLET1:STATUS", "OFF")
+        self.ca.assert_that_pv_is("OUTLET2:STATUS", "OFF")
