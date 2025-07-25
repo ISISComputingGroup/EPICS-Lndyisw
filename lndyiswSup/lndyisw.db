@@ -142,7 +142,8 @@ record(stringin, "$(P)OUTLET:SEP")
 
 record(stringout, "$(P)STATUS:ALLSET")
 {
-     field(DESC, "Sets all the outlet status")
+     field(DESC, "Read and Write the outlet status")
+     # EPICS SNMP allows passive polling on a record to update, using this fixes an issue with rapid sets being overwritten.
      field(DTYP, "Snmp")
      field(OUT, "@$(HOST) public PDU-MIB::pdu01OutletStatus.0 STRING: 100 s")
      field(FLNK, "$(P)OUTLET:STATUS1")
@@ -151,6 +152,7 @@ record(stringout, "$(P)STATUS:ALLSET")
 record(scalcout, "$(P)OUTLET:STATUS1")
 {
      field(INJJ, "$(P)STATUS:ALLSET")
+     # Split the first 4 outlets out of the status string.
      field(CALC, "B:=int(JJ[0,1]);C:=int(JJ[2,3]);D:=int(JJ[4,5]);E:=int(JJ[6,7]);0")
      field(FLNK, "$(P)OUTLET:STATUS2")
 }
@@ -159,6 +161,7 @@ record(scalcout, "$(P)OUTLET:STATUS1")
 record(scalcout, "$(P)OUTLET:STATUS2")
 {
      field(INJJ, "$(P)STATUS:ALLSET")
+     # Split the remaining 4 outlets out of the status string.
      field(CALC, "F:=int(JJ[8,9]);G:=int(JJ[10,11]);H:=int(JJ[12,13]);I:=int(JJ[14,15]);0")
 }
 
