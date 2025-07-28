@@ -135,107 +135,50 @@ record(ai, "$(P)OUTLET:TCURRENT")
      field(INP, "@$(HOST) public PDU-MIB::pdu01Value.0 INTEGER: 100 iR")
 }
 
-record(waveform, "$(P)OUTLET:_STATUS")
-{
-     field(DESC, "PSU Outlet Status")
-     field(DTYP, "Snmp")
-     field(SCAN, "2 second")
-     field(INP, "@$(HOST) public PDU-MIB::pdu01OutletStatus.0 STRING: 100 s")
-	 field(FTVL, "CHAR")
-	 field(NELM, "200")
-	 field(FLNK, "$(P)OUTLET:STATUS")
-}
-
 record(stringin, "$(P)OUTLET:SEP")
 {
     field(VAL, ",\"")
 }
 
-record(aSub, "$(P)OUTLET:STATUS")
-{
-     field(DESC, "PSU Outlet Status")
-	 field(SNAM, "splitCharWaveform")
-     field(INPA, "$(P)OUTLET:_STATUS")
-     field(INPB, "$(P)OUTLET:_STATUS.NORD")
-	 field(FTB, "ULONG")
-	 field(FTC, "ULONG")
-	 field(FTD, "STRING")
-	 field(FTE, "ULONG")
-	 field(FTA, "CHAR")
-	 field(FTVA, "STRING")
-	 field(FTVB, "STRING")
-	 field(FTVC, "STRING")
-	 field(FTVD, "STRING")
-	 field(FTVE, "STRING")
-	 field(FTVF, "STRING")
-	 field(FTVG, "STRING")
-	 field(FTVH, "STRING")
-	 field(FTVI, "STRING")
-	 field(FTVJ, "STRING")
-	 field(FTVU, "ULONG")
-	 field(NOA, "200")
-	 field(INPC, "1")
-	 field(INPD, "$(P)OUTLET:SEP")
-}
-
-record(waveform, "$(P)OUTLET:_CURRENT")
-{
-     field(DESC, "PSU Outlet Current value")
-     field(DTYP, "Snmp")
-     field(SCAN, "2 second")
-     field(INP, "@$(HOST) public PDU-MIB::pdu01SubValues.0 STRING: 100 s")
-	 field(FTVL, "CHAR")
-	 field(NELM, "200")
-	 field(FLNK, "$(P)OUTLET:CURRENT")
-}
-
-record(aSub, "$(P)OUTLET:CURRENT")
-{
-     field(DESC, "PSU Outlet CURRENT")
-	 field(SNAM, "splitCharWaveform")
-     field(INPA, "$(P)OUTLET:_CURRENT")
-     field(INPB, "$(P)OUTLET:_CURRENT.NORD")
-	 field(FTB, "ULONG")
-	 field(FTC, "ULONG")
-	 field(FTD, "STRING")
-	 field(FTE, "ULONG")
-	 field(FTA, "CHAR")
-	 field(FTVA, "STRING")
-	 field(FTVB, "STRING")
-	 field(FTVC, "STRING")
-	 field(FTVD, "STRING")
-	 field(FTVE, "STRING")
-	 field(FTVF, "STRING")
-	 field(FTVG, "STRING")
-	 field(FTVH, "STRING")
-	 field(FTVI, "STRING")
-	 field(FTVJ, "STRING")
-	 field(FTVU, "ULONG")
-	 field(NOA, "200")
-	 field(INPC, "1")
-	 field(INPD, "$(P)OUTLET:SEP")
-}
-
 record(stringout, "$(P)STATUS:ALLSET")
 {
-     field(DESC, "Sets all the outlet status")
+     field(DESC, "Read and Write the outlet status")
+     # EPICS SNMP allows passive polling on a record to update, using this fixes an issue with rapid sets being overwritten.
      field(DTYP, "Snmp")
      field(OUT, "@$(HOST) public PDU-MIB::pdu01OutletStatus.0 STRING: 100 s")
+     field(FLNK, "$(P)OUTLET:STATUS1")
+}
+
+record(scalcout, "$(P)OUTLET:STATUS1")
+{
+     field(INJJ, "$(P)STATUS:ALLSET")
+     # Split the first 4 outlets out of the status string.
+     field(CALC, "B:=int(JJ[0,1]);C:=int(JJ[2,3]);D:=int(JJ[4,5]);E:=int(JJ[6,7]);0")
+     field(FLNK, "$(P)OUTLET:STATUS2")
+}
+
+
+record(scalcout, "$(P)OUTLET:STATUS2")
+{
+     field(INJJ, "$(P)STATUS:ALLSET")
+     # Split the remaining 4 outlets out of the status string.
+     field(CALC, "F:=int(JJ[8,9]);G:=int(JJ[10,11]);H:=int(JJ[12,13]);I:=int(JJ[14,15]);0")
 }
 
 record(scalcout, "$(P)STATUS:CURRVAL")
 {
-    field(INAA, "$(P)OUTLET:STATUS.VALB")
-	field(INBB, "$(P)OUTLET:STATUS.VALC")
-    field(INCC, "$(P)OUTLET:STATUS.VALD")
-	field(INDD, "$(P)OUTLET:STATUS.VALE")
-    field(INEE, "$(P)OUTLET:STATUS.VALF")
-	field(INFF, "$(P)OUTLET:STATUS.VALG")
-    field(INGG, "$(P)OUTLET:STATUS.VALH")
-	field(INHH, "$(P)OUTLET:STATUS.VALI")
+    field(INAA, "$(P)OUTLET:STATUS1.B")
+	field(INBB, "$(P)OUTLET:STATUS1.C")
+    field(INCC, "$(P)OUTLET:STATUS1.D")
+	field(INDD, "$(P)OUTLET:STATUS1.E")
+    field(INEE, "$(P)OUTLET:STATUS2.F")
+	field(INFF, "$(P)OUTLET:STATUS2.G")
+    field(INGG, "$(P)OUTLET:STATUS2.H")
+	field(INHH, "$(P)OUTLET:STATUS2.I")
 	field(OCAL, "AA+','+BB+','+CC+','+DD+','+EE+','+FF+','+GG+','+HH")
 	field(DOPT, "Use OCAL")
-    field(CALC, "A:=NINT(I/10-1);B:=I%10;@@A:=PRINTF('%d',B);0")
+     # Input I is a 2 digit number where the first is the index of input to alter, and the second is the value to set it to.
+     field(CALC, "A:=NINT(I/10-1);B:=I%10;@@A:=PRINTF('%d',B);0")
 	field(OUT, "$(P)STATUS:ALLSET PP")
-	field(FLNK, "$(P)OUTLET:_STATUS")
+	field(FLNK, "$(P)OUTLET:_STATUS.PROC CA")
 }
