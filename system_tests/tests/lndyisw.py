@@ -5,7 +5,7 @@ from utils.channel_access import ChannelAccess  # type: ignore
 from utils.emulator_launcher import CommandLineEmulatorLauncher  # type: ignore
 from utils.ioc_launcher import get_default_ioc_dir  # type: ignore
 from utils.test_modes import TestModes  # type: ignore
-from utils.testing import get_running_lewis_and_ioc, unstable_test  # type: ignore
+from utils.testing import get_running_lewis_and_ioc  # type: ignore
 
 DEVICE_PREFIX = "LNDYISW_01"
 
@@ -34,13 +34,16 @@ class LndyiswTests(unittest.TestCase):
     def setUp(self):
         self._lewis, self._ioc = get_running_lewis_and_ioc("Lndyisw", DEVICE_PREFIX)
         self.ca = ChannelAccess(device_prefix=DEVICE_PREFIX)
+        ## restart IOC and emulator
+        self._ioc.__exit__(None, None, None)
+        self._lewis.__exit__(None, None, None)
+        self._lewis.__enter__()
+        self._ioc.__enter__()
 
-    @unstable_test()
     def test_LNDYISW_ioc_returns_expected_name(self):
         expected_value = "LYNDY"
         self.ca.assert_that_pv_is("NAME", expected_value)
 
-    @unstable_test()
     def test_LNDYISW_ioc_sets_new_name(self):
         old_value = "LYNDY"
         new_value = "ChangedName"
@@ -56,12 +59,10 @@ class LndyiswTests(unittest.TestCase):
         self.ca.assert_that_pv_is_not("NAME", new_value)
         self.ca.assert_that_pv_is("NAME", old_value)
 
-    @unstable_test()
     def test_LNDYISW_ioc_returns_expected_location(self):
         expected_value = "CHILTON-DIDCOT"
         self.ca.assert_that_pv_is("LOCATION", expected_value)
 
-    @unstable_test()
     def test_LNDYISW_ioc_sets_new_location(self):
         old_value = "CHILTON-DIDCOT"
         new_value = "ChangedName"
@@ -86,38 +87,48 @@ class LndyiswTests(unittest.TestCase):
             ("_second_half", "0,0,0,0,1,1,1,1"),
         ]
     )
-    @unstable_test()
     def test_status_split_properly(self, _, vals):
         self.ca.set_pv_value("STATUS:ALLSET", "0,0,0,0,0,0,0,0")
         self.ca.set_pv_value("STATUS:ALLSET", vals)
         check_outlet_status_calc(vals.split(","), self.ca)
         check_outlet_status_bi(vals.split(","), self.ca)
 
-    @parameterized.expand(
-        [
-            ("_index_1", 10, "AA"),
-            ("_index_2", 20, "BB"),
-            ("_index_3", 30, "CC"),
-            ("_index_4", 40, "DD"),
-            ("_index_5", 50, "EE"),
-            ("_index_6", 60, "FF"),
-            ("_index_7", 70, "GG"),
-            ("_index_8", 80, "HH"),
-        ]
-    )
-    @unstable_test()
-    def test_WHEN_curr_val_i_updates_THEN_correct_allset_update(self, _, index, curr):
+    def test_WHEN_curr_val_i_updates_THEN_correct_allset_update(self):
         allset = ["0", "0", "0", "0", "0", "0", "0", "0"]
         self.ca.set_pv_value("STATUS:ALLSET", ",".join(allset))
-        self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{curr}", "0")
-        self.ca.set_pv_value("STATUS:CURRVAL.I", index + 1)
-        self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{curr}", "1")
-        allset[int(index / 10) - 1] = "1"
-        self.ca.assert_that_pv_is("STATUS:ALLSET", ",".join(allset))
-        self.ca.set_pv_value("STATUS:CURRVAL.I", index)
-        self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{curr}", "0")
+        for index in range(0, 8):
+            # this is used to test against scalcout record string fields
+            # which are named AA, BB, CC etc.
+            field_part = chr(ord("A") + index)
+            field = field_part * 2
 
-    @unstable_test()
+            self.ca.set_pv_value("STATUS:CURRVAL.I", 10 * (index + 1) + 1)  # turn it on
+            self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{field}", "1")
+            allset[index] = "1"
+            self.ca.assert_that_pv_is("STATUS:ALLSET", ",".join(allset))
+
+            self.ca.set_pv_value("STATUS:CURRVAL.I", 10 * (index + 1))  # turn it off
+            self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{field}", "0")
+            allset[index] = "0"
+            self.ca.assert_that_pv_is("STATUS:ALLSET", ",".join(allset))
+
+        # we repeat above, but don't turn off outlets, so all eight should
+        # be on by end
+        for index in range(0, 8):
+            # this is used to test against scalcout record string fields
+            # which are named AA, BB, CC etc.
+            field_part = chr(ord("A") + index)
+            field = field_part * 2
+
+            self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{field}", "0")
+            self.ca.set_pv_value("STATUS:CURRVAL.I", 10 * (index + 1) + 1)  # turn it on
+            self.ca.assert_that_pv_is(f"STATUS:CURRVAL.{field}", "1")
+            allset[index] = "1"
+            self.ca.assert_that_pv_is("STATUS:ALLSET", ",".join(allset))
+
+        allset = ["0", "0", "0", "0", "0", "0", "0", "0"]
+        self.ca.set_pv_value("STATUS:ALLSET", ",".join(allset))
+
     def test_LNDYISW_ioc_WHEN_two_sets_THEN_both_work(self):
         self.ca.set_pv_value("STATUS:ALLSET", "0,0,0,0,0,0,0,0")
 
