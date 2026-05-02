@@ -3,7 +3,7 @@ import unittest
 from parameterized import parameterized
 from utils.channel_access import ChannelAccess  # type: ignore
 from utils.emulator_launcher import CommandLineEmulatorLauncher  # type: ignore
-from utils.ioc_launcher import get_default_ioc_dir  # type: ignore
+from utils.ioc_launcher import ProcServLauncher, get_default_ioc_dir  # type: ignore
 from utils.test_modes import TestModes  # type: ignore
 from utils.testing import get_running_lewis_and_ioc  # type: ignore
 
@@ -15,6 +15,7 @@ IOCS = [
         "name": DEVICE_PREFIX,
         "directory": get_default_ioc_dir("LNDYISW"),
         "macros": {"IPADDR": "127.0.0.1"},
+        "ioc_launcher_class": ProcServLauncher,
         "emulator": "Lndyisw",
         "emulator_launcher_class": CommandLineEmulatorLauncher,
         "emulator_command_line": "cmd.exe /c responder.bat",
