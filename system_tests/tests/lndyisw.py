@@ -26,6 +26,10 @@ IOCS = [
 TEST_MODES = [TestModes.DEVSIM]
 
 
+@unittest.skip(
+    "Lindy tests are very unstable due to the IOC crashing a large fraction of "
+    "the time when it connects to a simulated SNMP server."
+)
 class LndyiswTests(unittest.TestCase):
     """
     Tests for the Lndyisw IOC.
